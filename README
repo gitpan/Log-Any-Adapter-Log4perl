@@ -4,11 +4,12 @@ NAME
 SYNOPSIS
         use Log::Log4perl;
         Log::Log4perl::init('/etc/log4perl.conf');
-        Log::Any->set_adapter('Log::Log4perl');
+
+        Log::Any::Adapter->set('Log::Log4perl');
 
 DESCRIPTION
     This Log::Any adapter uses Log::Log4perl for logging. log4perl must be
-    initialized before calling *set_adapter*. There are no parameters.
+    initialized before calling *set*. There are no parameters.
 
 LOG LEVEL TRANSLATION
     Log levels are translated from Log::Any to Log4perl as follows:
@@ -20,7 +21,7 @@ LOG LEVEL TRANSLATION
         emergency -> fatal
 
 SEE ALSO
-    Log::Any, Log::Log4perl
+    Log::Any, Log::Any::Adapter, Log::Log4perl
 
 AUTHOR
     Jonathan Swartz

@@ -2,6 +2,11 @@ Revision history for Log-Any-Adapter-Log4perl
 
 ** denotes an incompatible change
 
+0.03  Oct 27, 2009
+
+- Update docs for new Log::Any::Adapter API
+- Add dependency on Log::Any::Adapter instead of Log::Any
+
 0.02  Jul 17, 2009
 
 - Initial version
