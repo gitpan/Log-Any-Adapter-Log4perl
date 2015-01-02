@@ -1,11 +1,18 @@
-package Log::Any::Adapter::Log4perl;
-use Log::Log4perl;
-use Log::Any::Adapter::Util qw(make_method);
 use strict;
 use warnings;
+
+package Log::Any::Adapter::Log4perl;
+# ABSTRACT: Log::Any adapter for Log::Log4perl
+
+use Log::Log4perl 1.32; # bug-free wrapper_register available
+use Log::Any::Adapter::Util qw(make_method);
 use base qw(Log::Any::Adapter::Base);
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
+
+# Ensure %F, %C, etc. skip Log::Any related packages
+Log::Log4perl->wrapper_register(__PACKAGE__);
+Log::Log4perl->wrapper_register("Log::Any::Proxy");
 
 sub init {
     my ($self) = @_;
@@ -24,36 +31,11 @@ foreach my $method ( Log::Any->logging_and_detection_methods() ) {
         s/critical|alert|emergency/fatal/;
     }
 
-    # Delegate to log4perl logger, increasing caller_depth so that %F, %C,
-    # etc. are generated correctly
-    #
     make_method(
         $method,
         sub {
             my $self = shift;
-            local $Log::Log4perl::caller_depth =
-              $Log::Log4perl::caller_depth + 1;
             return $self->{logger}->$log4perl_method(@_);
-        }
-    );
-}
-
-# Override alias and printf variants to increase depth first
-#
-my %aliases = Log::Any->log_level_aliases;
-my @methods = (
-    keys(%aliases),
-    ( map { $_ . "f" } ( Log::Any->logging_methods, keys(%aliases) ) )
-);
-foreach my $method (@methods) {
-    make_method(
-        $method,
-        sub {
-            my $self = shift;
-            local $Log::Log4perl::caller_depth =
-              $Log::Log4perl::caller_depth + 2;
-            my $super_method = "SUPER::$method";
-            return $self->$super_method(@_);
         }
     );
 }
@@ -64,9 +46,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
-Log::Any::Adapter::Log4perl
+Log::Any::Adapter::Log4perl - Log::Any adapter for Log::Log4perl
+
+=head1 VERSION
+
+version 0.07
 
 =head1 SYNOPSIS
 
@@ -80,6 +68,8 @@ Log::Any::Adapter::Log4perl
 This Log::Any adapter uses L<Log::Log4perl|Log::Log4perl> for logging. log4perl
 must be initialized before calling I<set>. There are no parameters.
 
+=for Pod::Coverage init
+
 =head1 LOG LEVEL TRANSLATION
 
 Log levels are translated from Log::Any to Log4perl as follows:
@@ -92,18 +82,60 @@ Log levels are translated from Log::Any to Log4perl as follows:
 
 =head1 SEE ALSO
 
-L<Log::Any|Log::Any>, L<Log::Any::Adapter|Log::Any::Adapter>,
-L<Log::Log4perl|Log::Log4perl>
+=over 4
 
-=head1 AUTHOR
+=item *
 
-Jonathan Swartz
+L<Log::Any>
 
-=head1 COPYRIGHT & LICENSE
+=item *
 
-Copyright (C) 2007 Jonathan Swartz, all rights reserved.
+L<Log::Any::Adapter>
 
-This program is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself.
+=item *
+
+L<Log::Log4perl>
+
+=back
+
+=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
+
+=head1 SUPPORT
+
+=head2 Bugs / Feature Requests
+
+Please report any bugs or feature requests through the issue tracker
+at L<https://github.com/dagolden/Log-Any-Adapter-Log4perl/issues>.
+You will be notified automatically of any progress on your issue.
+
+=head2 Source Code
+
+This is open source software.  The code repository is available for
+public review and contribution under the terms of the license.
+
+L<https://github.com/dagolden/Log-Any-Adapter-Log4perl>
+
+  git clone https://github.com/dagolden/Log-Any-Adapter-Log4perl.git
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Jonathan Swartz <swartz@pobox.com>
+
+=item *
+
+David Golden <dagolden@cpan.org>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Jonathan Swartz.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut

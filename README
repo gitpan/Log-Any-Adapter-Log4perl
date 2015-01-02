@@ -1,5 +1,8 @@
 NAME
-    Log::Any::Adapter::Log4perl
+    Log::Any::Adapter::Log4perl - Log::Any adapter for Log::Log4perl
+
+VERSION
+    version 0.07
 
 SYNOPSIS
         use Log::Log4perl;
@@ -21,14 +24,34 @@ LOG LEVEL TRANSLATION
         emergency -> fatal
 
 SEE ALSO
-    Log::Any, Log::Any::Adapter, Log::Log4perl
+    *   Log::Any
 
-AUTHOR
-    Jonathan Swartz
+    *   Log::Any::Adapter
 
-COPYRIGHT & LICENSE
-    Copyright (C) 2007 Jonathan Swartz, all rights reserved.
+    *   Log::Log4perl
 
-    This program is free software; you can redistribute it and/or modify it
-    under the same terms as Perl itself.
+SUPPORT
+  Bugs / Feature Requests
+    Please report any bugs or feature requests through the issue tracker at
+    <https://github.com/dagolden/Log-Any-Adapter-Log4perl/issues>. You will
+    be notified automatically of any progress on your issue.
+
+  Source Code
+    This is open source software. The code repository is available for
+    public review and contribution under the terms of the license.
+
+    <https://github.com/dagolden/Log-Any-Adapter-Log4perl>
+
+      git clone https://github.com/dagolden/Log-Any-Adapter-Log4perl.git
+
+AUTHORS
+    *   Jonathan Swartz <swartz@pobox.com>
+
+    *   David Golden <dagolden@cpan.org>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2015 by Jonathan Swartz.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
 
